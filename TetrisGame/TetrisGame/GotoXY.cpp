@@ -6,7 +6,7 @@ using namespace std;
 
 void gotoxy(int, int); // prototype
 
-// function definition -- requires windows.h
+// function definition
 void gotoxy(int x, int y)
 {
 	HANDLE hConsoleOutput;
@@ -16,4 +16,10 @@ void gotoxy(int x, int y)
 	dwCursorPosition.Y = y;
 	hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(hConsoleOutput, dwCursorPosition);
+}
+
+char whiteSquare = 254;
+
+void main() {
+	cout << whiteSquare << endl;
 }
