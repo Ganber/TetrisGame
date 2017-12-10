@@ -42,11 +42,12 @@ public:
 	}
 
 	void move() {
-		y = (y + 1) % HEIGHT;
-		gotoxy(x, y);
+		//Move the point down
+		gotoxy(x,y+1); 
 		cout << SQUARE;
-		gotoxy(x, (y + HEIGHT - 1) % HEIGHT);
-		cout << " ";
+		gotoxy(x, y);
+		cout << ' ';
+		y=(y+1) % 15;
 	 }
 };
 

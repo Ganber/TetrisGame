@@ -7,7 +7,11 @@ using namespace std;
 
 void main() {
 
-	Shape s(1);
-	s.draw();
-	s.move();
+	Shape s1(1);
+	Shape s2(1);
+	s1.draw();
+	s1.move();
+
+	s2.draw();
+	s2.move();
 }
