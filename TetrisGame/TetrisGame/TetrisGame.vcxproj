@@ -147,6 +147,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GotoXY.cpp" />
+    <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GotoXY.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Shape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
