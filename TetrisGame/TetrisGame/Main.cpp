@@ -5,13 +5,17 @@ using namespace std;
 #include"Point.h"
 #include "Shape.h"
 
+
 void main() {
 
-	Shape s1(1);
-	Shape s2(1);
-	s1.draw();
-	s1.move();
+	Shape s1(Shape::line);
+	Shape s2(Shape::square);
+	Shape s3(Shape::joker);
+	Shape s4(Shape::bomb);
+	
 
-	s2.draw();
-	s2.move();
+		s1.draw();
+		s1.gravity();
+
+
 }

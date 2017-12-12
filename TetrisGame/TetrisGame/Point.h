@@ -6,18 +6,18 @@
 using namespace std;
 
 class Point {
-	#define SQUARE (char) 254
-	enum boreder {LENGTH = 10, HEIGHT = 15};
+	#define _SQUARE '*'
+	enum border {WIDTH = 10, HEIGHT = 15};
 
 	int x;
 	int y;
-	int dirY = 1;
-	int dirX = 0;
+	char type;
 
 public:
-	Point(int _x = 1, int _y = 1) {
+	Point(int _x = 0, int _y = 0, char _type = ' ') {
 		x = _x;
 		y = _y;
+		type = _type;
 	}
 
 	int  getX() {
@@ -36,19 +36,43 @@ public:
 		y = _y;
 	}
 
-	void draw() {
-			gotoxy(x, y);
-			cout << SQUARE;
+	char getType() {
+		return type;
 	}
 
-	void move() {
+	void draw() {
+			gotoxy(x, y);
+			cout << type;
+	}
+
+	void moveDown() {
 		//Move the point down
 		gotoxy(x,y+1); 
-		cout << SQUARE;
+		cout << type;
 		gotoxy(x, y);
 		cout << ' ';
-		y=(y+1) % 15;
+		y++;
 	 }
+
+	void moveRight() {
+		if (x <= WIDTH) {
+			gotoxy(x + 1, y);
+			cout << type;
+			gotoxy(x, y);
+			cout << ' ';
+			x++;
+		}
+	}
+
+	void moveLeft() {
+		if (x >= 0) {
+			gotoxy(x - 1, y);
+			cout << type;
+			gotoxy(x, y);
+			cout << ' ';
+			x--;
+		}
+	}
 };
 
 
