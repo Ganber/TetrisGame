@@ -6,7 +6,8 @@
 using namespace std;
 
 class Point {
-	#define _SQUARE '*'
+	#define _TOP_CUBE (char)223
+	#define _BOT_CUBE (char)220
 
 
 	int x;

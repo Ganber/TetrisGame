@@ -21,17 +21,17 @@ public:
 
 		if (type == line) {
 			color = Yellow;
-			shapeArr[3][0] = Point(5, 1, _SQUARE);
-			shapeArr[3][1] = Point(6, 1, _SQUARE);
-			shapeArr[3][2] = Point(7, 1, _SQUARE);
-			shapeArr[3][3] = Point(8, 1, _SQUARE);
+			shapeArr[3][0] = Point(5, 1, _TOP_CUBE);
+			shapeArr[3][1] = Point(6, 1, _TOP_CUBE);
+			shapeArr[3][2] = Point(7, 1, _TOP_CUBE);
+			shapeArr[3][3] = Point(8, 1, _TOP_CUBE);
 		}
 		else if (type == cube) {
 			color = Green;
-			shapeArr[2][0] = Point(5, 0, _SQUARE);
-			shapeArr[2][1] = Point(6, 0, _SQUARE);
-			shapeArr[3][0] = Point(5, 1, _SQUARE);
-			shapeArr[3][1] = Point(6, 1, _SQUARE);
+			shapeArr[2][0] = Point(5, 0, _BOT_CUBE);
+			shapeArr[2][1] = Point(6, 0, _BOT_CUBE);
+			shapeArr[3][0] = Point(5, 1, _TOP_CUBE);
+			shapeArr[3][1] = Point(6, 1, _TOP_CUBE);
 		}
 		else if (type == bomb) {
 			color = Light_Red;
