@@ -7,13 +7,16 @@ using namespace std;
 
 class Point {
 	#define _SQUARE '*'
-	enum border {WIDTH = 10, HEIGHT = 15};
+
 
 	int x;
 	int y;
 	char type;
 
 public:
+	enum border { WIDTH = 10, HEIGHT = 15 }; //need to move this to game properties.
+
+
 	Point(int _x = 0, int _y = 0, char _type = ' ') {
 		x = _x;
 		y = _y;
@@ -47,31 +50,39 @@ public:
 
 	void moveDown() {
 		//Move the point down
-		gotoxy(x,y+1); 
-		cout << type;
-		gotoxy(x, y);
-		cout << ' ';
-		y++;
+		 
+			gotoxy(x, y + 1);
+			cout << type;
+			gotoxy(x, y);
+			cout << ' ';
+			y++;
+		
 	 }
 
-	void moveRight() {
+	boolean moveRight() {
 		if (x <= WIDTH) {
 			gotoxy(x + 1, y);
 			cout << type;
 			gotoxy(x, y);
 			cout << ' ';
 			x++;
+			return true;
 		}
+		else
+			return false;
 	}
 
-	void moveLeft() {
-		if (x >= 0) {
+	boolean moveLeft() {
+		if (x > 0) {
 			gotoxy(x - 1, y);
 			cout << type;
 			gotoxy(x, y);
 			cout << ' ';
 			x--;
+			return true;
 		}
+		else
+			return false;
 	}
 };
 
