@@ -8,7 +8,7 @@ using namespace std;
 class Point {
 	#define _TOP_CUBE (char)223
 	#define _BOT_CUBE (char)220
-
+	#define _Long_CUBE (char)219
 
 	int x;
 	int y;
@@ -74,7 +74,7 @@ public:
 	}
 
 	boolean moveLeft() {
-		if (x > 0) {
+		if (x > 1) {
 			gotoxy(x - 1, y);
 			cout << type;
 			gotoxy(x, y);
