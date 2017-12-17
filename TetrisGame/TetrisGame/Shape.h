@@ -69,8 +69,6 @@ public:
 
 
 		}
-
-
 	}
 
 	void move(char keyPressed) {
