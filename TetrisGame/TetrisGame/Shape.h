@@ -99,12 +99,12 @@ public:
 
 	void rotate() { //TODO: fix rotation
 
-		for (int i = 0; i < 4; i++)
-			for (int j = 0; j < 4; j++)
-				if (shapeArr[i][j].getType() != ' ') {
-					shapeArr[j][i].setType(shapeArr[i][j].getType());
-					shapeArr[i][j].setType(' ');
-				}
+		//for (int i = 0; i < 4; i++)
+		//	for (int j = 0; j < 4; j++)
+		//		if (shapeArr[i][j].getType() != ' ') {
+		//			shapeArr[j][i].setType(shapeArr[i][j].getType());
+		//			shapeArr[i][j].setType(' ');
+		//		}
 
 	}
 
