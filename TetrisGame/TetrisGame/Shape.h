@@ -4,6 +4,8 @@
 #include "Game.h"
 #include <conio.h>
 
+#define SPC (char) 32
+
 class Shape {
 	enum colors 
 	{Black,Blue,Green,Cyan,Red,Magenta,Brown,
@@ -67,6 +69,8 @@ public:
 				if (_kbhit()) {
 					char keyPressed = _getch();
 					move(keyPressed);
+					if (keyPressed == SPC && type == line)
+						rotate();
 				}
 			}
 			Sleep(gravitySpeed);
@@ -86,11 +90,24 @@ public:
 					if (shapeArr[3-i][3-j].moveRight() == false)
 						return;
 
-				 if (keyPressed == 's' && shapeArr[i][j].getType() != ' ')
+				 if (keyPressed == 's' && shapeArr[i][j].getType() != ' ')  //down to bottom fast
 					 gravitySpeed = 30;
+
 			}
 		
 	}
+
+	void rotate() { //TODO: fix rotation
+
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 4; j++)
+				if (shapeArr[i][j].getType() != ' ') {
+					shapeArr[j][i].setType(shapeArr[i][j].getType());
+					shapeArr[i][j].setType(' ');
+				}
+
+	}
+
 };
 
 #endif // !__Shape

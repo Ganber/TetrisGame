@@ -57,12 +57,11 @@ void gameRun() {
 
 	char keyPressed = 0;
 
-	if (_kbhit())
-		keyPressed = _getch();
-
-	while (!_kbhit() && keyPressed != ESC)
+	while (!_kbhit() && keyPressed != ESC) //TODO: fix the ESC to exit
 	{
-		keyPressed = _getch();
+		if (_kbhit()) {
+			keyPressed = _getch();
+		}
 
 		Shape s1(Shape::line);
 		Shape s2(Shape::cube);

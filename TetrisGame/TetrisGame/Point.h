@@ -43,6 +43,10 @@ public:
 		return type;
 	}
 
+	void setType(char _type) {
+		type = _type;
+	}
+
 	void draw() {
 			gotoxy(x, y);
 			cout << type;
