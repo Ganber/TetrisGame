@@ -1,6 +1,7 @@
 #ifndef __Point
 #define __Point
 #include "GotoXY.h"
+#include "Game.h"
 #include <iostream>
 #include <Windows.h>
 using namespace std;
@@ -15,8 +16,6 @@ class Point {
 	char type;
 
 public:
-	enum border { WIDTH = 10, HEIGHT = 15 }; //need to move this to game properties.
-
 
 	Point(int _x = 0, int _y = 0, char _type = ' ') {
 		x = _x;
@@ -51,13 +50,11 @@ public:
 
 	void moveDown() {
 		//Move the point down
-		 
 			gotoxy(x, y + 1);
 			cout << type;
 			gotoxy(x, y);
 			cout << ' ';
 			y++;
-		
 	 }
 
 	boolean moveRight() {

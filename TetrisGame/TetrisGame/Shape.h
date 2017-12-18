@@ -1,6 +1,7 @@
 #ifndef __Shape
 #define __Shape
 #include "Point.h"
+#include "Game.h"
 #include <conio.h>
 
 class Shape {
@@ -11,7 +12,8 @@ class Shape {
 	
 	int type;
 	int color;
-	Point shapeArr[4][4];
+	int gravitySpeed;
+	Point shapeArr[4][4]; //For all kind of shapes
 
 public:
 	enum Shapes { line, cube, bomb, joker };
@@ -20,27 +22,29 @@ public:
 		type = _type;
 
 		if (type == line) {
-			color = Yellow;
+			color = Light_Red;
 			shapeArr[3][0] = Point(5, 1, 'o');
 			shapeArr[3][1] = Point(6, 1, 'o');
 			shapeArr[3][2] = Point(7, 1, 'o');
 			shapeArr[3][3] = Point(8, 1, 'o');
 		}
 		else if (type == cube) {
-			color = Green;
+			color = Blue;
 			shapeArr[2][0] = Point(5, 0, 'o');
 			shapeArr[2][1] = Point(6, 0, 'o');
 			shapeArr[3][0] = Point(5, 1, 'o');
 			shapeArr[3][1] = Point(6, 1, 'o');
 		}
 		else if (type == bomb) {
-			color = Light_Red;
+			color = Cyan;
 			shapeArr[3][0] = Point(6, 1, '@');
 		}
 		else if (type == joker) {
-			color = White;
+			color = Brown;
 			shapeArr[3][0] = Point(6, 1, 'A');
 		}
+
+		gravitySpeed = 200;
 	}
 
 	void draw() {
@@ -53,7 +57,7 @@ public:
 	}
 
 	void gravity() {
-		for (int k = 0; k <Point::HEIGHT; k++) {
+		for (int k = 0; k < HEIGHT; k++) {
 
 			for (int i = 3; i >= 0; i--) {
 				for (int j = 0; j < 4; j++)
@@ -65,9 +69,7 @@ public:
 					move(keyPressed);
 				}
 			}
-			Sleep(200);
-
-
+			Sleep(gravitySpeed);
 		}
 	}
 
@@ -83,6 +85,9 @@ public:
 				 if (keyPressed == 'd' && shapeArr[3-i][3-j].getType() != ' ')  //Right button
 					if (shapeArr[3-i][3-j].moveRight() == false)
 						return;
+
+				 if (keyPressed == 's' && shapeArr[i][j].getType() != ' ')
+					 gravitySpeed = 30;
 			}
 		
 	}
