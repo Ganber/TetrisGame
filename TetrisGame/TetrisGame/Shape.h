@@ -12,67 +12,70 @@ class Shape {
 	 Light_Gray,Dark_Gray,Light_Blue,Light_Green,
 	 Light_Cyan,Light_Red,LightMagenta,Yellow,White};
 	
+	bool isRotate;
 	int type;
 	int color;
 	int gravitySpeed;
-	Point shapeArr[4][4]; //For all kind of shapes
+	Point shapeArr[4]; //For all kind of shapes
 
 public:
 	enum Shapes { line, cube, bomb, joker };
 
 	Shape(int _type) {
+
 		type = _type;
+		gravitySpeed = 200;
+		isRotate = false;
 
 		if (type == line) {
 			color = Light_Red;
-			shapeArr[3][0] = Point(5, 1, 'o');
-			shapeArr[3][1] = Point(6, 1, 'o');
-			shapeArr[3][2] = Point(7, 1, 'o');
-			shapeArr[3][3] = Point(8, 1, 'o');
+			shapeArr[0] = Point(5, 0, 'o');
+			shapeArr[1] = Point(6, 0, 'o');
+			shapeArr[2] = Point(7, 0, 'o');
+			shapeArr[3] = Point(8, 0, 'o');
 		}
 		else if (type == cube) {
-			color = Blue;
-			shapeArr[2][0] = Point(5, 0, 'o');
-			shapeArr[2][1] = Point(6, 0, 'o');
-			shapeArr[3][0] = Point(5, 1, 'o');
-			shapeArr[3][1] = Point(6, 1, 'o');
+			color = White;
+			shapeArr[0] = Point(5, 1, 'o');
+			shapeArr[1] = Point(6, 1, 'o');
+			shapeArr[2] = Point(5, 0, 'o');
+			shapeArr[3] = Point(6, 0, 'o');
 		}
 		else if (type == bomb) {
 			color = Cyan;
-			shapeArr[3][0] = Point(6, 1, '@');
+			shapeArr[0] = Point(6, 1, '@');
 		}
 		else if (type == joker) {
 			color = Brown;
-			shapeArr[3][0] = Point(6, 1, 'A');
+			shapeArr[0] = Point(6, 1, 'A');
 		}
-
-		gravitySpeed = 200;
 	}
 
 	void draw() {
 		SetColor(color);
 		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++)
-				if (shapeArr[i][j].getType() != ' ')
-					shapeArr[i][j].draw();
+				if (shapeArr[i].getType() != ' ')
+					shapeArr[i].draw();
 		}
 	}
 
 	void gravity() {
-		for (int k = 0; k < HEIGHT; k++) {
 
-			for (int i = 3; i >= 0; i--) {
-				for (int j = 0; j < 4; j++)
-					if (shapeArr[i][j].getType() != ' ')
-					shapeArr[i][j].moveDown();
+		while (shapeArr[0].getY() < HEIGHT + 1) {	//TODO: hit other shape
 
-				if (_kbhit()) {
-					char keyPressed = _getch();
-					move(keyPressed);
-					if (keyPressed == SPC && type == line)
-						rotate();
-				}
+			for (int i = 0; i < 4; i++) {
+				if (shapeArr[i].getType() != ' ')
+					shapeArr[i].moveDown();
 			}
+
+			if (_kbhit()) {
+				char keyPressed = _getch();
+				if (keyPressed == SPC && type == line)
+					rotate();
+				else
+					move(keyPressed);
+			}
+
 			Sleep(gravitySpeed);
 		}
 	}
@@ -80,32 +83,42 @@ public:
 	void move(char keyPressed) {
 
 		for (int i = 0; i < 4; i++) 
-			for (int j = 0; j < 4; j++) 
 			{
-				if (keyPressed == 'a' && shapeArr[i][j].getType() != ' ')  //Left button
-					if (shapeArr[i][j].moveLeft() == false)
+				if (keyPressed == 'a' && shapeArr[i].getType() != ' ')  //Left button
+					if (shapeArr[i].moveLeft() == false)
 						return;
 
-				 if (keyPressed == 'd' && shapeArr[3-i][3-j].getType() != ' ')  //Right button
-					if (shapeArr[3-i][3-j].moveRight() == false)
+				 if (keyPressed == 'd' && shapeArr[3-i].getType() != ' ')  //Right button
+					if (shapeArr[3-i].moveRight() == false)
 						return;
 
-				 if (keyPressed == 's' && shapeArr[i][j].getType() != ' ')  //down to bottom fast
+				 if (keyPressed == 's' && shapeArr[i].getType() != ' ')  //down to bottom fast
 					 gravitySpeed = 30;
-
 			}
 		
 	}
 
-	void rotate() { //TODO: fix rotation
+	void rotate() {
 
-		//for (int i = 0; i < 4; i++)
-		//	for (int j = 0; j < 4; j++)
-		//		if (shapeArr[i][j].getType() != ' ') {
-		//			shapeArr[j][i].setType(shapeArr[i][j].getType());
-		//			shapeArr[i][j].setType(' ');
-		//		}
+		if (shapeArr[3].getX() > WIDTH - 2 && isRotate) {
+			for (int i = 0; i < 4; i++)
+				shapeArr[i].movePoint(shapeArr[i].getX() - (WIDTH + 4 - shapeArr[i].getX()), shapeArr[i].getY());
+		}
 
+		for (int i = 0; i < 4; i++)
+
+			if (!isRotate) {
+				int newX = shapeArr[i].getX() - i;
+				int newY = shapeArr[i].getY() - i;
+				shapeArr[i].movePoint(newX, newY);
+			}
+			else {
+				int newX = shapeArr[i].getX() + i;
+				int newY = shapeArr[i].getY() + i;
+				shapeArr[i].movePoint(newX, newY);
+			}
+
+			isRotate = !isRotate;
 	}
 
 };

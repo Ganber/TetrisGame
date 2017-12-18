@@ -68,11 +68,13 @@ void gameRun() {
 		Shape s3(Shape::joker);
 		Shape s4(Shape::bomb);
 
-		s1.draw();
-		s1.gravity();
 
 		s2.draw();
 		s2.gravity();
+
+		s1.draw();
+		s1.gravity();
+
 
 		s3.draw();
 		s3.gravity();

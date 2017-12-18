@@ -47,21 +47,34 @@ public:
 		type = _type;
 	}
 
+	void movePoint(int _x, int _y) {
+		type = ' ';
+		draw();
+		x = _x;
+		y = _y;
+		type = 'o';
+		draw();
+	}
+
 	void draw() {
+		if (y > -1) {
 			gotoxy(x, y);
 			cout << type;
+		}
 	}
 
 	void moveDown() {
 		//Move the point down
+		if (y > -1) {
 			gotoxy(x, y + 1);
 			cout << type;
 			gotoxy(x, y);
 			cout << ' ';
+		}
 			y++;
 	 }
 
-	boolean moveRight() {
+	bool moveRight() {
 		if (x <= WIDTH) {
 			gotoxy(x + 1, y);
 			cout << type;
@@ -74,7 +87,7 @@ public:
 			return false;
 	}
 
-	boolean moveLeft() {
+	bool moveLeft() {
 		if (x > 1) {
 			gotoxy(x - 1, y);
 			cout << type;
