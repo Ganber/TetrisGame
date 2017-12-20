@@ -11,8 +11,6 @@ class Shape {
 	{Black,Blue,Green,Cyan,Red,Magenta,Brown,
 	 Light_Gray,Dark_Gray,Light_Blue,Light_Green,
 	 Light_Cyan,Light_Red,LightMagenta,Yellow,White};
-	
-
 
 	bool isRotate;
 	int type;

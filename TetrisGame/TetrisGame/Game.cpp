@@ -8,8 +8,6 @@
 #define _Long_CUBE (char)219
 #define ESC (char) 27
 
-
-
 void gameRun() {
 	bool mapArr[17][12] = { false }; //TODO: move it from here and use height and width (+2). (to Game CLASS)
 	initBoard();
@@ -26,7 +24,6 @@ void gameRun() {
 		Shape s2(Shape::cube);
 		Shape s3(Shape::joker);
 		Shape s4(Shape::bomb);
-
 
 
 		s2.draw();
