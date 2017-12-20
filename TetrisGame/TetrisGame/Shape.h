@@ -12,6 +12,8 @@ class Shape {
 	 Light_Gray,Dark_Gray,Light_Blue,Light_Green,
 	 Light_Cyan,Light_Red,LightMagenta,Yellow,White};
 	
+
+
 	bool isRotate;
 	int type;
 	int color;
@@ -20,11 +22,12 @@ class Shape {
 
 public:
 	enum Shapes { line, cube, bomb, joker };
+	enum direction { DOWN, LEFT, RIGHT };
 
 	Shape(int _type) {
 
 		type = _type;
-		gravitySpeed = 200;
+		gravitySpeed = 500;
 		isRotate = false;
 
 		if (type == line) {
@@ -59,38 +62,45 @@ public:
 		}
 	}
 
-	void gravity() {
+	void gravity(bool GameBoard[][12]) //TODO: change 12 to height
+	{
 
-		while (shapeArr[0].getY() < HEIGHT + 1) {	//TODO: hit other shape
+		while (shapeArr[0].getY() < HEIGHT + 1 && isShapeCanMove(DOWN, GameBoard)) {	//TODO: hit other shape
 
 			for (int i = 0; i < 4; i++) {
 				if (shapeArr[i].getType() != ' ')
-					shapeArr[i].moveDown();
+					shapeArr[i].move(DOWN, GameBoard);
 			}
 
-			if (_kbhit()) {
+			while (_kbhit()) {
 				char keyPressed = _getch();
 				if (keyPressed == SPC && type == line)
 					rotate();
 				else
-					move(keyPressed);
+					move(keyPressed, GameBoard);
+
+				Sleep(50); //TODO: NEED A FIX FOR FAST MOVING
 			}
 
 			Sleep(gravitySpeed);
 		}
+
+		for (int i = 0; i < 4; i++) //set the map array of the game 
+			GameBoard[shapeArr[i].getY()][shapeArr[i].getX()] = true;
+
 	}
 
-	void move(char keyPressed) {
+	void move(char keyPressed,bool GameBoard[][12]) {
 
 		for (int i = 0; i < 4; i++) 
 			{
-				if (keyPressed == 'a' && shapeArr[i].getType() != ' ')  //Left button
-					if (shapeArr[i].moveLeft() == false)
-						return;
+			if (keyPressed == 'a' && shapeArr[i].getType() != ' ')  //Left button
+				if (isShapeCanMove(LEFT, GameBoard))
+					shapeArr[i].move(LEFT, GameBoard);
 
-				 if (keyPressed == 'd' && shapeArr[3-i].getType() != ' ')  //Right button
-					if (shapeArr[3-i].moveRight() == false)
-						return;
+			if (keyPressed == 'd' && shapeArr[3 - i].getType() != ' ')  //Right button
+				if (isShapeCanMove(RIGHT, GameBoard))
+					shapeArr[i].move(RIGHT, GameBoard);
 
 				 if (keyPressed == 's' && shapeArr[i].getType() != ' ')  //down to bottom fast
 					 gravitySpeed = 30;
@@ -121,6 +131,17 @@ public:
 			isRotate = !isRotate;
 	}
 
+
+
+	bool isShapeCanMove(int dir, bool gameBaord[][12]) {
+		bool res = true;
+
+		for (int i = 0; i < 4; i++)
+			if (shapeArr[i].canMove(dir, gameBaord) == false)
+				res=false;
+
+		return res;
+	}
 };
 
 #endif // !__Shape

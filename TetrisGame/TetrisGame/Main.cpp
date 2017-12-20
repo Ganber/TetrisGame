@@ -7,6 +7,9 @@ using namespace std;
 #include "Game.h"
 
 
+
 void main() {
-	gameRun();
+
+
+	gameRun(); //TODO: create game CLASS !
 }

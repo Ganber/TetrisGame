@@ -1,4 +1,4 @@
-#ifndef __Game
+﻿#ifndef __Game
 #define __Game
 
 enum border { WIDTH = 10, HEIGHT = 15 };

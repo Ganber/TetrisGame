@@ -7,10 +7,10 @@
 using namespace std;
 
 class Point {
-	#define _TOP_CUBE (char)223
-	#define _BOT_CUBE (char)220
-	#define _Long_CUBE (char)219
-
+#define _TOP_CUBE (char)223
+#define _BOT_CUBE (char)220
+#define _Long_CUBE (char)219
+	enum direction { DOWN, LEFT, RIGHT }; //TODO: this is here and also in shape.h ??
 	int x;
 	int y;
 	char type;
@@ -63,42 +63,66 @@ public:
 		}
 	}
 
-	void moveDown() {
-		//Move the point down
-		if (y > -1) {
-			gotoxy(x, y + 1);
-			cout << type;
-			gotoxy(x, y);
-			cout << ' ';
-		}
-			y++;
-	 }
+	void move(int dir, bool gameBaord[][12]) {
 
-	bool moveRight() {
-		if (x <= WIDTH) {
-			gotoxy(x + 1, y);
-			cout << type;
-			gotoxy(x, y);
-			cout << ' ';
-			x++;
-			return true;
+		if (dir == DOWN) {//Move the point down
+			if (gameBaord[y + 1][x] == false) { //that's mean that we can move the point down by 1.
+				gotoxy(x, y++); //change the y value after we finish the statment.
+				cout << ' ';
+				draw();
+			}
 		}
-		else
-			return false;
+
+		else if (dir == LEFT) {
+			if (x > 1 && gameBaord[y][x - 1] == false) { //check that we can move left.
+				gotoxy(x--, y); //chagne the x value to x-1. (moving left)
+				cout << ' ';
+				draw();
+			}
+
+		}
+
+		else if (dir == RIGHT) {
+			if (x <= WIDTH && gameBaord[y][x + 1] == false) {
+				gotoxy(x++, y);//chagne the x value to x+1. (moving right)
+				cout << ' ';
+				draw();
+			}
+
+		}
+
 	}
 
-	bool moveLeft() {
-		if (x > 1) {
-			gotoxy(x - 1, y);
-			cout << type;
-			gotoxy(x, y);
-			cout << ' ';
-			x--;
-			return true;
+	bool canMove(int dir, bool gameBaord[][12]) {
+
+		if (dir == DOWN) {//Move the point down
+			if (gameBaord[y + 1][x] == false) { //that's mean that we can move the point down by 1.
+				return true;
+			}
+			else
+				return false;
 		}
-		else
-			return false;
+
+		else if (dir == LEFT) {
+			if (x > 1 && gameBaord[y][x - 1] == false) { //check that we can move left.
+				return true;
+			}
+			else //that's mean we cant move the point left.
+				return false;
+		}
+
+		else if (dir == RIGHT) {
+			if (x <= WIDTH && gameBaord[y][x + 1] == false) {
+				return true;
+			}
+			else
+				return false;
+		}
+
+		return false;
 	}
+
+
 };
 
 

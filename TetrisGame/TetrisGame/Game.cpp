@@ -8,6 +8,46 @@
 #define _Long_CUBE (char)219
 #define ESC (char) 27
 
+
+
+void gameRun() {
+	bool mapArr[17][12] = { false }; //TODO: move it from here and use height and width (+2). (to Game CLASS)
+	initBoard();
+
+	char keyPressed = 0;
+
+	while (!_kbhit() && keyPressed != 'k') //TODO: fix the ESC to exit and change 'k' to ECS
+	{
+		if (_kbhit()) {
+			keyPressed = _getch();
+		}
+
+		Shape s1(Shape::line);
+		Shape s2(Shape::cube);
+		Shape s3(Shape::joker);
+		Shape s4(Shape::bomb);
+
+
+
+		s2.draw();
+		s2.gravity(mapArr);
+
+
+		s1.draw();
+		s1.gravity(mapArr);
+
+
+		s3.draw();
+		s3.gravity(mapArr);
+
+		s4.draw();
+		s4.gravity(mapArr);
+
+		s2.draw();
+		s2.gravity(mapArr);
+	}
+}
+
 void initBoard() {
 	/*
 	▄▄▄▄▄▄▄▄▄▄▄▄▄
@@ -48,38 +88,5 @@ void initBoard() {
 			cout << arr[i][j];
 		}
 		cout << endl;
-	}
-}
-
-void gameRun() {
-
-	initBoard();
-
-	char keyPressed = 0;
-
-	while (!_kbhit() && keyPressed != ESC) //TODO: fix the ESC to exit
-	{
-		if (_kbhit()) {
-			keyPressed = _getch();
-		}
-
-		Shape s1(Shape::line);
-		Shape s2(Shape::cube);
-		Shape s3(Shape::joker);
-		Shape s4(Shape::bomb);
-
-
-		s2.draw();
-		s2.gravity();
-
-		s1.draw();
-		s1.gravity();
-
-
-		s3.draw();
-		s3.gravity();
-
-		s4.draw();
-		s4.gravity();
 	}
 }
