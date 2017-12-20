@@ -7,9 +7,9 @@
 using namespace std;
 
 class Point {
-#define _TOP_CUBE (char)223
-#define _BOT_CUBE (char)220
-#define _Long_CUBE (char)219
+	#define _TOP_CUBE (char)223
+	#define _BOT_CUBE (char)220
+	#define _Long_CUBE (char)219
 	enum direction { DOWN, LEFT, RIGHT }; //TODO: this is here and also in shape.h ??
 	int x;
 	int y;
@@ -121,7 +121,6 @@ public:
 
 		return false;
 	}
-
 
 };
 
