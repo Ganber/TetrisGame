@@ -66,7 +66,7 @@ public:
 	void move(int dir, bool gameBaord[][12]) {
 
 		if (dir == DOWN) {//Move the point down
-			if (gameBaord[y + 1][x] == false) { //that's mean that we can move the point down by 1.
+			if (canMove(DOWN, gameBaord)) { //that's mean that we can move the point down by 1.
 				gotoxy(x, y++); //change the y value after we finish the statment.
 				cout << ' ';
 				draw();
@@ -74,7 +74,7 @@ public:
 		}
 
 		else if (dir == LEFT) {
-			if (x > 1 && gameBaord[y][x - 1] == false) { //check that we can move left.
+			if (x > 1 && canMove(LEFT,gameBaord)) { //check that we can move left.
 				gotoxy(x--, y); //chagne the x value to x-1. (moving left)
 				cout << ' ';
 				draw();
@@ -83,7 +83,7 @@ public:
 		}
 
 		else if (dir == RIGHT) {
-			if (x <= WIDTH && gameBaord[y][x + 1] == false) {
+			if (x <= WIDTH && canMove(RIGHT, gameBaord)) {
 				gotoxy(x++, y);//chagne the x value to x+1. (moving right)
 				cout << ' ';
 				draw();
