@@ -23,91 +23,18 @@ public:
 		y = _y;
 		type = _type;
 	}
+		int  getX() {return x;}
+	int getY() {return y;}
+	void setX(int _x) {x = _x;}
+	void setY(int _y) {y = _y;}
+	char getType() {return type;}
+	void setType(char _type) {type = _type;}
+	void movePoint(int _x, int _y);
+	void draw();
+	void move(int dir, bool gameBaord[][12]);
+	bool canMove(int dir, bool gameBaord[][12]);
 
-	int  getX() {
-		return x;
-	}
 
-	int getY() {
-		return y;
-	}
-
-	void setX(int _x) {
-		x = _x;
-	}
-
-	void setY(int _y) {
-		y = _y;
-	}
-
-	char getType() {
-		return type;
-	}
-
-	void setType(char _type) {
-		type = _type;
-	}
-
-	void movePoint(int _x, int _y) {
-		type = ' ';
-		draw();
-		x = _x;
-		y = _y;
-		type = 'o';
-		draw();
-	}
-
-	void draw() {
-		if (y > -1) {
-			gotoxy(x, y);
-			cout << type;
-		}
-	}
-
-	void move(int dir, bool gameBaord[][12]) {
-		if (type != ' ') {
-			if (dir == DOWN) {
-				gotoxy(x, y++); //change the y value after we finish the statment.
-				cout << ' ';
-				draw();
-			}
-
-			else if (dir == LEFT) {
-				gotoxy(x--, y); //chagne the x value to x-1. (moving left)
-				cout << ' ';
-				draw();
-			}
-
-			else if (dir == RIGHT) {
-				gotoxy(x++, y);//chagne the x value to x+1. (moving right)
-				cout << ' ';
-				draw();
-			}
-		}
-	}
-
-	bool canMove(int dir, bool gameBaord[][12]) {
-
-		if (dir == DOWN) {//Move the point down
-			if (gameBaord[y + 1][x] == false) { //that's mean that we can move the point down by 1.
-				return true;
-			}
-		}
-
-		else if (dir == LEFT) {
-			if (x > 1 && gameBaord[y][x - 1] == false) { //check that we can move left.
-				return true;
-			}
-		}
-
-		else if (dir == RIGHT) {
-			if (x <= WIDTH && gameBaord[y][x + 1] == false) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 };
 

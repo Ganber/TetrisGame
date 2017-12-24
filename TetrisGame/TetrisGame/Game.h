@@ -4,49 +4,48 @@
 using namespace std;
 #include <iostream>
 #include "Shape.h"
+#include <ctime>
+#include <cstdlib>
 
-#define _TOP_CUBE (char)223
-#define _BOT_CUBE (char)220
-#define _Long_CUBE (char)219
+
 #define ESC (char) 27
 
 class Game {
 public:
 	enum border { WIDTH = 10, HEIGHT = 15 };
-    int gameGravity = 500;
+
 
 private:
 	char boardArr[HEIGHT + 3][WIDTH + 3];
 	bool mapArr[HEIGHT + 2][WIDTH + 2] = { false };
-
+    int gameSpeed;
 public:
-	Game(){
-		gameGravity = 500;
-	}
+	Game() { gameSpeed = 500; }
 
-	void gameRun() {
+	void runGame() {
 
 		initBoard();
-		menu();
-
+		initMenu();
 		char keyPressed = 0;
 
-		while (keyPressed != '9')
+		while (1)
 		{
 			if (_kbhit())
 				keyPressed = _getch();
 
-			int check = 0;
-
 			if (keyPressed == '1')
-				check = newGame();
-				if (check == 9) {
+				Shape tempShape=createShape();
+
+				if (0) {
 					gotoxy(2, HEIGHT + 3);
 					cout << "Game Over" << endl << endl;
 					return;
 				}
+
 		}
 	}
+
+
 
 	void initBoard() {
 		for (int i = 0; i < HEIGHT + 3; i++)
@@ -68,7 +67,7 @@ public:
 		}
 	}
 
-	void menu() {
+	void initMenu() {
 		gotoxy(20, 1);
 		cout << "--------------------";
 		gotoxy(20, 2);
@@ -85,12 +84,39 @@ public:
 		cout << "--------------------";
 	}
 
-	int newGame() {
-		Shape s1(rand()%4,&gameGravity);
+	Shape createShape() {
+		Shape s1(rand()%4, gameSpeed); //create a random shape.
 
 		s1.draw();
-		return s1.gravity(mapArr);
+		clock_t startTime;
+		double msPassed;
+		startTime = clock(); //Start timer for speed.
+
+
+		while (s1.getShapeArr()[0].getY() < Shape::HEIGHT + 1 && s1.isShapeCanMove(Point::DOWN, mapArr)) {
+			msPassed = ((clock() - startTime)); //miliSecond passed..
+			if (_kbhit()) {
+				s1.keyPressed(_getch(), mapArr, gameSpeed);
+			}
+
+			if (msPassed > s1.getShapeSpeed()) { //if more than 0.4 sec passed than move down
+				for (int i = 0; i < 4; i++) {
+					if (s1.getShapeArr()[i].getType() != ' ')
+						s1.getShapeArr()[i].move(Point::DOWN, mapArr);
+				}
+				msPassed = 0;
+				startTime = clock();
+			}
+
+		}
+
+		for (int i = 0; i < 4; i++) //set the map array of the game 
+			mapArr[s1.getShapeArr()[i].getY()][s1.getShapeArr()[i].getX()] = true;
+
+		return s1;
 	}
+
+
 };
 
 #endif // !__Game
