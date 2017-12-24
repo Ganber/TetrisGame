@@ -1,21 +1,22 @@
 #ifndef __Point
 #define __Point
 #include "GotoXY.h"
-#include "Game.h"
 #include <iostream>
 #include <Windows.h>
 using namespace std;
 
+#define _TOP_CUBE (char)223
+#define _BOT_CUBE (char)220
+#define _Long_CUBE (char)219
+
 class Point {
-	#define _TOP_CUBE (char)223
-	#define _BOT_CUBE (char)220
-	#define _Long_CUBE (char)219
-	enum direction { DOWN, LEFT, RIGHT }; //TODO: this is here and also in shape.h ??
+	enum border { WIDTH = 10, HEIGHT = 15 };
 	int x;
 	int y;
 	char type;
 
 public:
+	enum direction { DOWN, LEFT, RIGHT };
 
 	Point(int _x = 0, int _y = 0, char _type = ' ') {
 		x = _x;
@@ -64,33 +65,25 @@ public:
 	}
 
 	void move(int dir, bool gameBaord[][12]) {
-
-		if (dir == DOWN) {//Move the point down
-			if (canMove(DOWN, gameBaord)) { //that's mean that we can move the point down by 1.
+		if (type != ' ') {
+			if (dir == DOWN) {
 				gotoxy(x, y++); //change the y value after we finish the statment.
 				cout << ' ';
 				draw();
 			}
-		}
 
-		else if (dir == LEFT) {
-			if (x > 1 && canMove(LEFT,gameBaord)) { //check that we can move left.
+			else if (dir == LEFT) {
 				gotoxy(x--, y); //chagne the x value to x-1. (moving left)
 				cout << ' ';
 				draw();
 			}
 
-		}
-
-		else if (dir == RIGHT) {
-			if (x <= WIDTH && canMove(RIGHT, gameBaord)) {
+			else if (dir == RIGHT) {
 				gotoxy(x++, y);//chagne the x value to x+1. (moving right)
 				cout << ' ';
 				draw();
 			}
-
 		}
-
 	}
 
 	bool canMove(int dir, bool gameBaord[][12]) {
@@ -99,24 +92,18 @@ public:
 			if (gameBaord[y + 1][x] == false) { //that's mean that we can move the point down by 1.
 				return true;
 			}
-			else
-				return false;
 		}
 
 		else if (dir == LEFT) {
 			if (x > 1 && gameBaord[y][x - 1] == false) { //check that we can move left.
 				return true;
 			}
-			else //that's mean we cant move the point left.
-				return false;
 		}
 
 		else if (dir == RIGHT) {
 			if (x <= WIDTH && gameBaord[y][x + 1] == false) {
 				return true;
 			}
-			else
-				return false;
 		}
 
 		return false;

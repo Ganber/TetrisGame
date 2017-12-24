@@ -1,31 +1,32 @@
 #ifndef __Shape
 #define __Shape
 #include "Point.h"
-#include "Game.h"
 #include <conio.h>
 
 #define SPC (char) 32
 
 class Shape {
-	enum colors 
-	{Black,Blue,Green,Cyan,Red,Magenta,Brown,
-	 Light_Gray,Dark_Gray,Light_Blue,Light_Green,
-	 Light_Cyan,Light_Red,LightMagenta,Yellow,White};
+	enum colors
+	{
+		Black, Blue, Green, Cyan, Red, Magenta, Brown,
+		Light_Gray, Dark_Gray, Light_Blue, Light_Green,
+		Light_Cyan, Light_Red, LightMagenta, Yellow, White
+	};
+	enum border { WIDTH = 10, HEIGHT = 15 };
 
 	bool isRotate;
 	int type;
 	int color;
-	int gravitySpeed;
+	int *gravitySpeed;
 	Point shapeArr[4]; //For all kind of shapes
 
 public:
 	enum Shapes { line, cube, bomb, joker };
-	enum direction { DOWN, LEFT, RIGHT };
 
-	Shape(int _type) {
+	Shape(int _type, int* _gravitySpeed) {
 
 		type = _type;
-		gravitySpeed = 500;
+		gravitySpeed = _gravitySpeed;
 		isRotate = false;
 
 		if (type == line) {
@@ -55,55 +56,84 @@ public:
 	void draw() {
 		SetColor(color);
 		for (int i = 0; i < 4; i++) {
-				if (shapeArr[i].getType() != ' ')
-					shapeArr[i].draw();
+			if (shapeArr[i].getType() != ' ')
+				shapeArr[i].draw();
 		}
 	}
 
-	void gravity(bool GameBoard[][12]) //TODO: change 12 to height
+	int gravity(bool GameBoard[][HEIGHT - 3])
 	{
-
-		while (shapeArr[0].getY() < HEIGHT + 1 && isShapeCanMove(DOWN, GameBoard)) {	//TODO: hit other shape
+		int tempGravity = *gravitySpeed;
+		bool gravityChanged = false;
+		char keyPressed = 0;
+		while (shapeArr[0].getY() < HEIGHT + 1 && isShapeCanMove(Point::DOWN, GameBoard)) {
 
 			for (int i = 0; i < 4; i++) {
 				if (shapeArr[i].getType() != ' ')
-					shapeArr[i].move(DOWN, GameBoard);
+					shapeArr[i].move(Point::DOWN, GameBoard);
 			}
 
-			while (_kbhit()) {
-				char keyPressed = _getch();
-				if (keyPressed == SPC && type == line)
+			while (_kbhit() ) {
+				keyPressed = _getch();
+
+				if (keyPressed == '9')
+					return 9;
+
+				else if (keyPressed == '2') {
+					gotoxy(2, HEIGHT + 3);
+					cout << "Game Paused" << endl;
+					keyPressed = _getch();
+					while (keyPressed != '2') {
+						keyPressed = _getch();
+					}
+					gotoxy(2, HEIGHT + 3);
+					cout << "              " << endl;
+				}
+
+				else if (keyPressed == '3')
+					*gravitySpeed = *gravitySpeed + 100;
+
+				else if (keyPressed == '4')
+					*gravitySpeed = *gravitySpeed - 100;
+
+				else if (keyPressed == SPC && type == line)
 					rotate();
 				else
 					move(keyPressed, GameBoard);
 
-				Sleep(50); //TODO: NEED A FIX FOR FAST MOVING
+				if (keyPressed == 's' && gravityChanged==false) {
+					tempGravity = *gravitySpeed;
+					*gravitySpeed = 30;
+					gravityChanged = true;
+				}
+
 			}
 
-			Sleep(gravitySpeed);
+			Sleep(*gravitySpeed);
 		}
+
+		if (gravityChanged)
+			*gravitySpeed = tempGravity;
+
 
 		for (int i = 0; i < 4; i++) //set the map array of the game 
 			GameBoard[shapeArr[i].getY()][shapeArr[i].getX()] = true;
-
 	}
 
-	void move(char keyPressed,bool GameBoard[][12]) {
+	void move(char keyPressed, bool GameBoard[][12]) {
 
-		for (int i = 0; i < 4; i++) 
-			{
-			if (keyPressed == 'a' && shapeArr[i].getType() != ' ')  //Left button
-				if (isShapeCanMove(LEFT, GameBoard))
-					shapeArr[i].move(LEFT, GameBoard);
+		if (keyPressed == 'a') {
+			if (isShapeCanMove(Point::LEFT, GameBoard))
+				for (int i = 0; i < 4; i++)
+					shapeArr[i].move(Point::LEFT, GameBoard);
+		}
 
-			if (keyPressed == 'd' && shapeArr[3 - i].getType() != ' ')  //Right button
-				if (isShapeCanMove(RIGHT, GameBoard))
-					shapeArr[i].move(RIGHT, GameBoard);
+		if (keyPressed == 'd') {
+			if (isShapeCanMove(Point::RIGHT, GameBoard))
+				for (int i = 0; i < 4; i++)
+					shapeArr[3 - i].move(Point::RIGHT, GameBoard);
+		}
 
-				 if (keyPressed == 's' && shapeArr[i].getType() != ' ')  //down to bottom fast
-					 gravitySpeed = 30;
-			}
-		
 	}
 
 	void rotate() {
@@ -129,14 +159,12 @@ public:
 			isRotate = !isRotate;
 	}
 
-
-
 	bool isShapeCanMove(int dir, bool gameBaord[][12]) {
 		bool res = true;
 
 		for (int i = 0; i < 4; i++)
-			if (shapeArr[i].canMove(dir, gameBaord) == false)
-				res=false;
+			if (shapeArr[i].canMove(dir, gameBaord) == false && shapeArr[i].getType() != ' ')
+				res = false;
 
 		return res;
 	}
