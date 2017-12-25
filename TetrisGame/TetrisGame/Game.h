@@ -11,16 +11,20 @@ class Game {
 public:
 	enum border { WIDTH = 10, HEIGHT = 15 };
 	enum asciiShapes {LongCube=219,TopCube=223};
-	char mapArr[HEIGHT][WIDTH + 1] = { false }; // + 1 becuase of the boards.
+
 
 private:
     int gameSpeed;
 	int gameScore;
 	int shapeCount;
+	char mapArr[HEIGHT][WIDTH + 1] = { false }; // + 1 becuase of the boards.
+	int speedSaver;
+	bool isPressedDown = false; //maybe think about smthing smarted to save speed.
 public:
 	Game()
 	{ 
-	gameSpeed = 400;
+	gameSpeed = 300;
+	speedSaver = 300;
 	gameScore = 0;
 	shapeCount = 0;
 	}
@@ -106,7 +110,7 @@ public:
 			}
 
 		}
-		gameSpeed = 500; //TODO: need fix this. game shdln't be reset to 500 every shape.
+		gameSpeed = speedSaver;
 		return s1;
 
 	}
@@ -217,7 +221,11 @@ public:
 
 		case 80:
 		{ // down arrow
+			if (!isPressedDown)
+			speedSaver = gameSpeed;
+
 			gameSpeed = gameSpeed / 10; //TODO: this need to happen just for 1 falling piece.
+			isPressedDown = true;
 			break;
 		}
 
@@ -239,14 +247,15 @@ public:
 			cout << "              " << endl;
 			break;
 		}
-		case 52:
-		{ // '4' -> slow down game
-			gameSpeed += 100;
+		case 51:
+		{ // '3' -> slow down game
+			speedSaver = gameSpeed += 100;
+			
 			break;
 		}
-		case 51:
-		{ // '3' -> speed up game
-			gameSpeed -= 100;
+		case 52:
+		{ // '4' -> speed up game
+			speedSaver = gameSpeed -= 100;
 			break;
 		}
 		case 32: { // Space key
