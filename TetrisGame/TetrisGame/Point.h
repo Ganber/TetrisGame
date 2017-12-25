@@ -5,9 +5,7 @@
 #include <Windows.h>
 using namespace std;
 
-#define _TOP_CUBE (char)223
-#define _BOT_CUBE (char)220
-#define _Long_CUBE (char)219
+
 
 class Point {
 	enum border { WIDTH = 10, HEIGHT = 15 };
@@ -32,7 +30,7 @@ public:
 	void movePoint(int _x, int _y);
 	void draw();
 	void move(int dir);
-	bool canMove(int dir, char gameBaord[][12]);
+	bool canMove(int dir, char gameBaord[][11]);
 
 
 

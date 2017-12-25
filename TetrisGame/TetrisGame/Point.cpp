@@ -9,14 +9,12 @@ void Point::movePoint(int _x, int _y) {
 	type = 'o';
 	draw();
 }
-
 void Point::draw() {
 	if (y > -1) {
 		gotoxy(x, y);
 		cout << type;
 	}
 }
-
 void Point::move(int dir) {
 	if (type != ' ') {
 		if (dir == DOWN) {
@@ -38,10 +36,9 @@ void Point::move(int dir) {
 		}
 	}
 }
+bool Point::canMove(int dir, char gameBaord[][11]) {
 
-bool Point::canMove(int dir, char gameBaord[][12]) {
-
-	if (dir == DOWN) {//Move the point down
+	if (y<HEIGHT-1 && dir == DOWN) {//Move the point down
 		if (gameBaord[y + 1][x] == ' ') { //that's mean that we can move the point down by 1.
 			return true;
 		}
@@ -54,7 +51,7 @@ bool Point::canMove(int dir, char gameBaord[][12]) {
 	}
 
 	else if (dir == RIGHT) {
-		if (x <= WIDTH && gameBaord[y][x + 1] == ' ') {
+		if (x < WIDTH && gameBaord[y][x + 1] == ' ') {
 			return true;
 		}
 	}

@@ -1,5 +1,6 @@
 #include "Game.h"
 
 void main() {
-	Game().runGame();
+	Game newGame;
+	newGame.runGame();
 }
