@@ -27,6 +27,7 @@ public:
 	void draw();
 	void rotate();
 	bool isShapeCanMove(int dir, char gameBaord[][12]);
+	bool isShapeCanRotate();
 	void keyPressed(int keyCode, char GameBoard[][12],int& gameSpeed);
 	Point* getShapeArr();
 	void setShapeSpeed(int newSpeed);

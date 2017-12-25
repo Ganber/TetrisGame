@@ -52,25 +52,28 @@ void Shape::draw() {
 
 void Shape::rotate() {
 
-	if (shapeArr[3].getX() > Shape::WIDTH - 2 && isRotated) {
+	if (shapeArr[0].getY() > 1) {
+		if (shapeArr[0].getX() > Game::WIDTH - 2 && isRotated) {
+			//this is in case that the shape is too close to the right WALL.
+			for (int i = 0; i < 4; i++)
+				shapeArr[i].movePoint(shapeArr[i].getX() - (4 - ((Game::WIDTH + 2) - shapeArr[i].getX())), shapeArr[i].getY());
+		}
+
 		for (int i = 0; i < 4; i++)
-			shapeArr[i].movePoint(shapeArr[i].getX() - (WIDTH + 4 - shapeArr[i].getX()), shapeArr[i].getY());
+
+			if (!isRotated) {
+				int newX = shapeArr[i].getX() - i;
+				int newY = shapeArr[i].getY() - i;
+				shapeArr[i].movePoint(newX, newY);
+			}
+			else {
+				int newX = shapeArr[i].getX() + i;
+				int newY = shapeArr[i].getY() + i;
+				shapeArr[i].movePoint(newX, newY);
+			}
+
+			isRotated = !isRotated;
 	}
-
-	for (int i = 0; i < 4; i++)
-
-		if (!isRotated) {
-			int newX = shapeArr[i].getX() - i;
-			int newY = shapeArr[i].getY() - i;
-			shapeArr[i].movePoint(newX, newY);
-		}
-		else {
-			int newX = shapeArr[i].getX() + i;
-			int newY = shapeArr[i].getY() + i;
-			shapeArr[i].movePoint(newX, newY);
-		}
-
-		isRotated = !isRotated;
 }
 
 bool Shape::isShapeCanMove(int dir, char gameBaord[][12]) {
@@ -83,6 +86,13 @@ bool Shape::isShapeCanMove(int dir, char gameBaord[][12]) {
 	return res;
 }
 
+bool Shape::isShapeCanRotate() {
+	if (shapeArr[0].getY() > 2) {
+		return true;
+
+
+	}
+}
 
 void Shape::keyPressed(int keyCode, char GameBoard[][12],int& gameSpeed) {
 

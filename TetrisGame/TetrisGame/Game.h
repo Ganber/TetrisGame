@@ -24,7 +24,7 @@ private:
 public:
 	Game()
 	{ 
-	gameSpeed = 500;
+	gameSpeed = 1000;
 	gameScore = 0;
 	shapeCount = 0;
 	}
