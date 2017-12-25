@@ -30,11 +30,20 @@ Shape::Shape(int _type,int gameSpeed) {
 		shapeArr[0] = Point(6, 1, 'A');
 	}
 }
+Shape::Shape(const Shape& s1) {
+	shapeSpeed = s1.shapeSpeed;
+	isRotated = s1.isRotated;
+	type = s1.type;
+	color = s1.color;
+	for (int i = 0; i < 4; i++)
+		shapeArr[i] = s1.shapeArr[i]; //maybe can cause a bug. pointer to object.
+}
+
 
 Point* Shape::getShapeArr() {
 	return shapeArr;
 }
-int Shape::getShapeSpeed() { return shapeSpeed; }
+int Shape::getShapeSpeed()const { return shapeSpeed; }
 void Shape::setShapeSpeed(int newSpeed) {
 	shapeSpeed = newSpeed;
 }
@@ -71,7 +80,7 @@ void Shape::rotate() {
 		isRotated = !isRotated;
 }
 
-bool Shape::isShapeCanMove(int dir, bool gameBaord[][12]) {
+bool Shape::isShapeCanMove(int dir, char gameBaord[][12]) {
 	bool res = true;
 
 	for (int i = 0; i < 4; i++)
@@ -82,7 +91,7 @@ bool Shape::isShapeCanMove(int dir, bool gameBaord[][12]) {
 }
 
 
-void Shape::keyPressed(int keyCode, bool GameBoard[][12],int& gameSpeed) {
+void Shape::keyPressed(int keyCode, char GameBoard[][12],int& gameSpeed) {
 
 	switch (keyCode)
 	{
@@ -90,14 +99,14 @@ void Shape::keyPressed(int keyCode, bool GameBoard[][12],int& gameSpeed) {
 	{ // left Arrow
 		if (isShapeCanMove(Point::LEFT, GameBoard))
 			for (int i = 0; i < 4; i++)
-				shapeArr[i].move(Point::LEFT, GameBoard);
+				shapeArr[i].move(Point::LEFT);
 		break;
 	}
 	case 77:
 	{ // right arrow
 		if (isShapeCanMove(Point::RIGHT, GameBoard))
 			for (int i = 0; i < 4; i++)
-				shapeArr[3 - i].move(Point::RIGHT, GameBoard);
+				shapeArr[3 - i].move(Point::RIGHT);
 		break;
 	}
 

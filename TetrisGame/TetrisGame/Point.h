@@ -31,8 +31,8 @@ public:
 	void setType(char _type) {type = _type;}
 	void movePoint(int _x, int _y);
 	void draw();
-	void move(int dir, bool gameBaord[][12]);
-	bool canMove(int dir, bool gameBaord[][12]);
+	void move(int dir);
+	bool canMove(int dir, char gameBaord[][12]);
 
 
 

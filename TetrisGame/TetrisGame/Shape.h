@@ -24,13 +24,14 @@ public:
 	enum border { WIDTH = 10, HEIGHT = 15 };
 	enum Shapes { line, cube, bomb, joker };
 	Shape(int _Type,int gameSpeed);
+	Shape(const Shape& s1);
 	void draw();
 	void rotate();
-	bool isShapeCanMove(int dir, bool gameBaord[][12]);
-	void keyPressed(int keyCode, bool GameBoard[][12],int& gameSpeed);
+	bool isShapeCanMove(int dir, char gameBaord[][12]);
+	void keyPressed(int keyCode, char GameBoard[][12],int& gameSpeed);
 	Point* getShapeArr();
 	void setShapeSpeed(int newSpeed);
-	int  getShapeSpeed();
+	int getShapeSpeed()const;
 };
 
 #endif // !__Shape

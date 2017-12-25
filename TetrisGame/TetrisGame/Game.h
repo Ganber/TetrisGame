@@ -17,7 +17,7 @@ public:
 
 private:
 	char boardArr[HEIGHT + 3][WIDTH + 3];
-	bool mapArr[HEIGHT + 2][WIDTH + 2] = { false };
+	char mapArr[HEIGHT + 2][WIDTH + 2] = { false };
     int gameSpeed;
 public:
 	Game() { gameSpeed = 500; }
@@ -34,9 +34,10 @@ public:
 				keyPressed = _getch();
 
 			if (keyPressed == '1')
-				Shape tempShape=createShape();
+				createShape();
 
-				if (0) {
+			for (int i = 0; i < WIDTH + 2; i++)
+				if (mapArr[0][i] != ' ') {
 					gotoxy(2, HEIGHT + 3);
 					cout << "Game Over" << endl << endl;
 					return;
@@ -65,6 +66,15 @@ public:
 			}
 			cout << endl;
 		}
+
+
+		for (int i = 0; i < HEIGHT + 2; i++) {
+			for (int j = 0; j < WIDTH + 2; j++) {
+				mapArr[i][j] = ' ';
+			}
+		}
+
+
 	}
 
 	void initMenu() {
@@ -84,7 +94,7 @@ public:
 		cout << "--------------------";
 	}
 
-	Shape createShape() {
+	void createShape() {
 		Shape s1(rand()%4, gameSpeed); //create a random shape.
 
 		s1.draw();
@@ -102,7 +112,7 @@ public:
 			if (msPassed > s1.getShapeSpeed()) { //if more than 0.4 sec passed than move down
 				for (int i = 0; i < 4; i++) {
 					if (s1.getShapeArr()[i].getType() != ' ')
-						s1.getShapeArr()[i].move(Point::DOWN, mapArr);
+						s1.getShapeArr()[i].move(Point::DOWN);
 				}
 				msPassed = 0;
 				startTime = clock();
@@ -111,9 +121,8 @@ public:
 		}
 
 		for (int i = 0; i < 4; i++) //set the map array of the game 
-			mapArr[s1.getShapeArr()[i].getY()][s1.getShapeArr()[i].getX()] = true;
+			mapArr[s1.getShapeArr()[i].getY()][s1.getShapeArr()[i].getX()] = s1.getShapeArr()[i].getType();
 
-		return s1;
 	}
 
 
