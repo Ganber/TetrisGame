@@ -1,3 +1,9 @@
 # TetrisGame
 C++
-do the shapes in diffrent sizes of arrays, or everthing in 4x4 array?
+TODO LIST:
+
+(1) fix joker movement.
+(2) fix boomb.
+(3) fix\delete colors.
+(4) fix rotate line at begin (auto game-over)
+(5) fix slow\high speed mode.
