@@ -24,7 +24,6 @@ public:
 	enum border { WIDTH = 10, HEIGHT = 15 };
 	enum Shapes { line, cube, bomb, joker };
 	Shape(int _Type,int gameSpeed);
-	Shape(const Shape& s1);
 	void draw();
 	void rotate();
 	bool isShapeCanMove(int dir, char gameBaord[][12]);

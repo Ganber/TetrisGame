@@ -95,12 +95,13 @@ public:
 	}
 
 	void createShape() {
-		Shape s1(rand()%4, gameSpeed); //create a random shape.
-
+		 Shape s1(rand()%4, gameSpeed); //create a random shape.
+	
 		s1.draw();
 		clock_t startTime;
 		double msPassed;
 		startTime = clock(); //Start timer for speed.
+		bool completedLine = true;
 
 
 		while (s1.getShapeArr()[0].getY() < Shape::HEIGHT + 1 && s1.isShapeCanMove(Point::DOWN, mapArr)) {
@@ -120,8 +121,33 @@ public:
 
 		}
 
-		for (int i = 0; i < 4; i++) //set the map array of the game 
+
+
+		for (int i = 0; i < 4; i++) //put the shape in the map array of the game 
 			mapArr[s1.getShapeArr()[i].getY()][s1.getShapeArr()[i].getX()] = s1.getShapeArr()[i].getType();
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 1; j < WIDTH + 2; j++) {
+				if (mapArr[s1.getShapeArr()[i].getY()][j] == ' ')
+					completedLine = false;
+							}
+			if (completedLine) {
+				updateBoard(s1.getShapeArr()[i].getY());
+			}
+			completedLine = true;
+		}
+
+	}
+
+	void updateBoard(int line) {
+		for (int y = line; y > 0; y--)
+			for (int x = 1; x < WIDTH + 2; x++)
+			{
+				gotoxy(x,y);
+				cout << mapArr[y-1][x];
+				mapArr[y][x] = mapArr[y - 1][x];
+			}
+
 
 	}
 
@@ -129,3 +155,4 @@ public:
 };
 
 #endif // !__Game
+

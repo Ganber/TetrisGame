@@ -30,14 +30,7 @@ Shape::Shape(int _type,int gameSpeed) {
 		shapeArr[0] = Point(6, 1, 'A');
 	}
 }
-Shape::Shape(const Shape& s1) {
-	shapeSpeed = s1.shapeSpeed;
-	isRotated = s1.isRotated;
-	type = s1.type;
-	color = s1.color;
-	for (int i = 0; i < 4; i++)
-		shapeArr[i] = s1.shapeArr[i]; //maybe can cause a bug. pointer to object.
-}
+
 
 
 Point* Shape::getShapeArr() {

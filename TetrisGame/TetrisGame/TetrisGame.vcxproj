@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GotoXY.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Point.cpp" />
