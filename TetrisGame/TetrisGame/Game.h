@@ -19,8 +19,15 @@ private:
 	char boardArr[HEIGHT + 3][WIDTH + 3];
 	char mapArr[HEIGHT + 2][WIDTH + 2] = { false };
     int gameSpeed;
+	int gameScore;
+	int shapeCount;
 public:
-	Game() { gameSpeed = 500; }
+	Game()
+	{ 
+	gameSpeed = 500;
+	gameScore = 0;
+	shapeCount = 0;
+	}
 
 	void runGame() {
 
@@ -79,22 +86,27 @@ public:
 
 	void initMenu() {
 		gotoxy(20, 1);
-		cout << "--------------------";
+		cout << "Game Score: ";
 		gotoxy(20, 2);
-		cout << "| (1) New Game     |";
+		cout << "Shapes dropped: ";
 		gotoxy(20, 3);
-		cout << "| (2) Pause/Resume |";
+		cout << "--------------------";
 		gotoxy(20, 4);
-		cout << "| (3) Speed down   |";
+		cout << "| (1) New Game     |";
 		gotoxy(20, 5);
-		cout << "| (4) Speed up     |";
+		cout << "| (2) Pause/Resume |";
 		gotoxy(20, 6);
-		cout << "| (9) Exit Game    |";
+		cout << "| (3) Speed down   |";
 		gotoxy(20, 7);
+		cout << "| (4) Speed up     |";
+		gotoxy(20, 8);
+		cout << "| (9) Exit Game    |";
+		gotoxy(20, 9);
 		cout << "--------------------";
 	}
 
 	void createShape() {
+		updateScoreAndCount();
 		 Shape s1(rand()%4, gameSpeed); //create a random shape.
 	
 		s1.draw();
@@ -102,7 +114,7 @@ public:
 		double msPassed;
 		startTime = clock(); //Start timer for speed.
 		bool completedLine = true;
-
+		int numOfLinesComplted = 0;
 
 		while (s1.getShapeArr()[0].getY() < Shape::HEIGHT + 1 && s1.isShapeCanMove(Point::DOWN, mapArr)) {
 			msPassed = ((clock() - startTime)); //miliSecond passed..
@@ -132,10 +144,35 @@ public:
 					completedLine = false;
 							}
 			if (completedLine) {
+				numOfLinesComplted++;
 				updateBoard(s1.getShapeArr()[i].getY());
 			}
 			completedLine = true;
 		}
+		
+		switch (numOfLinesComplted)
+		{
+		case 1: {
+			gameScore += 40;
+			break;
+		}
+		case 2: {
+			gameScore += 100;
+			break;
+		}
+		case 3: {
+			gameScore += 300;
+			break;
+		}
+		case 4: {
+			gameScore += 1200;
+			break;
+		}
+		default:
+			break;
+		}
+		shapeCount++;
+
 
 	}
 
@@ -150,7 +187,12 @@ public:
 
 
 	}
-
+	void updateScoreAndCount() {
+		gotoxy(32, 1);
+		cout << gameScore;
+		gotoxy(35, 2);
+		cout << shapeCount;
+	}
 
 };
 
