@@ -18,7 +18,7 @@ private:
 	int gameScore;
 	int shapeCount;
 	char mapArr[HEIGHT][WIDTH + 1] = { false }; // + 1 becuase of the boards.
-	int speedSaver;
+	int speedSaver; //maybe think about smthing smarted to save speed.
 	bool isPressedDown = false; //maybe think about smthing smarted to save speed.
 public:
 	Game()
@@ -46,8 +46,6 @@ public:
 				}
 		}
 	}
-
-
 	void initBoard() {
 		gotoxy(0, 0);
 		for (int i = 0; i < HEIGHT; i++) {
@@ -141,7 +139,6 @@ public:
 			
 				return false;
 	}
-
 	void startNewGame() {
 		bool completedLine;
 		int numOfLinesComplted = 0;
@@ -160,19 +157,24 @@ public:
 			for (int i = 0; i < 4; i++) //put the shape in the map array of the game 
 				mapArr[s1.getShapeArr()[i].getY()][s1.getShapeArr()[i].getX()] = s1.getShapeArr()[i].getType();
 
+			if (s1.getType() == Shape::bomb)
+			{
+				createExplosion(s1);
+			}
+			else {
+				//for each point in the shape, check if she complted a line :
+				for (int i = 3; i >= 0; i--) { // need to start from the top to bottom.
+					completedLine = true; //we assume that the line is complted.
+					for (int j = 1; j < WIDTH + 1; j++) {
+						if (mapArr[s1.getShapeArr()[i].getY()][j] == ' ') //that's mean that the line isn't complted.
+							completedLine = false;
+					}
+					if (completedLine) {
+						numOfLinesComplted++;
+						updateCompltedLine(s1.getShapeArr()[i].getY()); //this update the board and move above shapes down.
+					}
 
-			//for each point in the shape, check if she complted a line :
-			for (int i = 3; i >= 0; i--) { // need to start from the top to bottom.
-				completedLine = true; //we assume that the line is complted.
-				for (int j = 1; j < WIDTH + 1; j++) {
-					if (mapArr[s1.getShapeArr()[i].getY()][j] == ' ') //that's mean that the line isn't complted.
-						completedLine = false;
 				}
-				if (completedLine) {
-					numOfLinesComplted++;
-					updateCompltedLine(s1.getShapeArr()[i].getY()); //this update the board and move above shapes down.
-				}
-			
 			}
 
 			switch (numOfLinesComplted)
@@ -199,7 +201,6 @@ public:
 			updateScoreAndCount();
 		}
 	}
-
 	void keyPressed(int keyCode, Shape &s1) {
 
 		switch (keyCode)
@@ -264,6 +265,24 @@ public:
 		}
 
 		}
+	}
+
+	void createExplosion(Shape bomb) {
+		for (int i = -1; i < 2; i++)
+		{
+			for (int j = -1; j < 2; j++)
+				mapArr[bomb.getShapeArr()[0].getY() + i][bomb.getShapeArr()[0].getX() + j] = ' ';
+		}
+
+		updateBoard();
+	}
+
+	void updateBoard() {
+		for (int y = 0; y < HEIGHT; y++)
+			for (int x = 1; x < WIDTH+1; x++) {
+				gotoxy(x, y);
+				cout << mapArr[y][x];
+			}
 	}
 };
 
