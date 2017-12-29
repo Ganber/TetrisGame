@@ -7,25 +7,21 @@ Shape::Shape(int _type) {
 	isRotated = false;
 
 	if (type == line) {
-		color = Light_Red;
 		shapeArr[0] = Point(5, 0, 'o');
 		shapeArr[1] = Point(6, 0, 'o');
 		shapeArr[2] = Point(7, 0, 'o');
 		shapeArr[3] = Point(8, 0, 'o');
 	}
 	else if (type == cube) {
-		color = White;
 		shapeArr[0] = Point(5, 1, 'o');
 		shapeArr[1] = Point(6, 1, 'o');
 		shapeArr[2] = Point(5, 0, 'o');
 		shapeArr[3] = Point(6, 0, 'o');
 	}
 	else if (type == bomb) {
-		color = Cyan;
 		shapeArr[0] = Point(6, 1, '@');
 	}
 	else if (type == joker) {
-		color = Brown;
 		shapeArr[0] = Point(6, 1, 'A');
 	}
 }
@@ -33,7 +29,6 @@ Point* Shape::getShapeArr() {
 	return shapeArr;
 }
 void Shape::draw() {
-	SetColor(color);
 	for (int i = 0; i < 4; i++) {
 		if (shapeArr[i].getType() != ' ')
 			shapeArr[i].draw();

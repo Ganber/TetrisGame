@@ -1,5 +1,6 @@
 ﻿#ifndef __Game
 #define __Game
+
 using namespace std;
 #include <iostream>
 #include "Shape.h"
@@ -12,7 +13,6 @@ public:
 	enum border { WIDTH = 10, HEIGHT = 15 };
 	enum asciiShapes {LongCube=219,TopCube=223};
 
-
 private:
     int gameSpeed;
 	int gameScore;
@@ -21,8 +21,7 @@ private:
 	int speedSaver; //maybe think about smthing smarted to save speed.
 	bool isPressedDown = false; //maybe think about smthing smarted to save speed.
 public:
-	Game()
-	{ 
+	Game(){ 
 	gameSpeed = 300;
 	speedSaver = 300;
 	gameScore = 0;
@@ -39,14 +38,14 @@ public:
 			keyPressed = 0;
 	    	if (_kbhit())
 				keyPressed = _getch();
-				if (keyPressed == '1') 
-				{ //user want to start new game.
-
+				if (keyPressed == '1') { //user want to start new game.
 					startNewGame();
 				}
 		}
 	}
+
 	void initBoard() {
+		system("CLS");
 		gotoxy(0, 0);
 		for (int i = 0; i < HEIGHT; i++) {
 			cout << (char)LongCube <<"          "<<(char)LongCube<< endl;
@@ -60,9 +59,8 @@ public:
 				mapArr[i][j] = ' ';
 			}
 		}
-
-
 	}
+
 	void initMenu() {
 		gotoxy(20, 1);
 		cout << "Game Score:      ";
@@ -83,13 +81,13 @@ public:
 		gotoxy(20, 9);
 		cout << "--------------------";
 	}
+
 	Shape dropNewShape() {
 		
-	    Shape s1(rand()%4); //create a random shape.
+	    Shape s1(createRandomShape()); //create a random shape.
 		s1.draw();
 		clock_t startTime = clock(); //Start timer for speed.
 		double msPassed;
-
 
 		while (s1.getShapeArr()[0].getY() < Game::HEIGHT + 1 && s1.isShapeCanMove(Point::DOWN, mapArr)) {
 			msPassed = ((clock() - startTime)); //miliSecond passed..
@@ -106,12 +104,12 @@ public:
 				msPassed = 0; //starting the timer again.
 				startTime = clock();
 			}
-
 		}
 		gameSpeed = speedSaver;
 		return s1;
 
 	}
+
 	void updateCompltedLine(int line) {
 		for (int y = line; y > 0; y--)
 			for (int x = 1; x < WIDTH + 1; x++)
@@ -120,15 +118,15 @@ public:
 				cout << mapArr[y-1][x];
 				mapArr[y][x] = mapArr[y - 1][x];
 			}
-
-
 	}
+
 	void updateScoreAndCount() {
 		gotoxy(32, 1);
 		cout << gameScore;
 		gotoxy(35, 2);
 		cout << shapeCount;
 	}
+
 	bool gameOver(){
 		for (int i = 0; i < WIDTH + 1; i++)
 			if (mapArr[0][i] != ' ') {
@@ -136,11 +134,12 @@ public:
 				cout << "Game Over" << endl << endl;
 				return true;
 			}
-			
 				return false;
 	}
+
 	void startNewGame() {
 		bool completedLine;
+		int numOfShapeExploded = 0;
 		int numOfLinesComplted = 0;
 		//init the game settings.
 		gameScore = 0;
@@ -148,7 +147,6 @@ public:
 		initBoard();
 		initMenu();
 		updateScoreAndCount();
-
 
 		while (!gameOver()) {
 			Shape s1 = dropNewShape(); //s1 is the shape after she fell down
@@ -159,7 +157,7 @@ public:
 
 			if (s1.getType() == Shape::bomb)
 			{
-				createExplosion(s1);
+				numOfShapeExploded = createExplosion(s1);
 			}
 			else {
 				//for each point in the shape, check if she complted a line :
@@ -173,7 +171,6 @@ public:
 						numOfLinesComplted++;
 						updateCompltedLine(s1.getShapeArr()[i].getY()); //this update the board and move above shapes down.
 					}
-
 				}
 			}
 
@@ -198,9 +195,15 @@ public:
 			default:
 				break;
 			}
+
+			gameScore -= (50 * numOfShapeExploded);
+
 			updateScoreAndCount();
+			numOfLinesComplted = 0;
+			numOfShapeExploded = 0;
 		}
 	}
+
 	void keyPressed(int keyCode, Shape &s1) {
 
 		switch (keyCode)
@@ -223,7 +226,7 @@ public:
 		case 80:
 		{ // down arrow
 			if (!isPressedDown)
-			speedSaver = gameSpeed;
+				speedSaver = gameSpeed;
 
 			gameSpeed = gameSpeed / 10; //TODO: this need to happen just for 1 falling piece.
 			isPressedDown = true;
@@ -250,13 +253,14 @@ public:
 		}
 		case 51:
 		{ // '3' -> slow down game
-			speedSaver = gameSpeed += 100;
-			
+			gameSpeed += 100;
+			speedSaver = gameSpeed;
 			break;
 		}
 		case 52:
 		{ // '4' -> speed up game
-			speedSaver = gameSpeed -= 100;
+			gameSpeed -= 100;
+			speedSaver = gameSpeed;
 			break;
 		}
 		case 32: { // Space key
@@ -267,14 +271,20 @@ public:
 		}
 	}
 
-	void createExplosion(Shape bomb) {
-		for (int i = -1; i < 2; i++)
-		{
+	int createExplosion(Shape bomb) {
+		int hitShapeCounter = 0;
+
+		for (int i = -1; i < 2; i++){
 			for (int j = -1; j < 2; j++)
-				mapArr[bomb.getShapeArr()[0].getY() + i][bomb.getShapeArr()[0].getX() + j] = ' ';
+				if (mapArr[bomb.getShapeArr()[0].getY() + i][bomb.getShapeArr()[0].getX() + j] != ' ') {
+					mapArr[bomb.getShapeArr()[0].getY() + i][bomb.getShapeArr()[0].getX() + j] = ' ';
+					hitShapeCounter++;
+				}
 		}
 
 		updateBoard();
+
+		return hitShapeCounter - 1;
 	}
 
 	void updateBoard() {
@@ -283,6 +293,23 @@ public:
 				gotoxy(x, y);
 				cout << mapArr[y][x];
 			}
+	}
+
+	int createRandomShape() {
+		srand(time(NULL));
+		int pivot = rand() % 10 + 1;
+
+		if (pivot == 1)
+			return Shape::bomb;
+
+		else if (pivot == 2)
+			return Shape::joker;
+
+		else if (pivot > 2 && pivot < 7)
+			return Shape::cube;
+
+		else
+			return Shape::line;
 	}
 };
 
