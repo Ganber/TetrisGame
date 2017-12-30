@@ -16,7 +16,6 @@ public:
 	void draw();
 	void rotate();
 	bool isShapeCanMove(int dir, char gameBaord[][11]);
-	bool isShapeCanRotate();
 	Point* getShapeArr();
 };
 
