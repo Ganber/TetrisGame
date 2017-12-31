@@ -20,10 +20,10 @@ Shape::Shape(int _type) {
 	}
 
 	 if (type == bomb) 
-		shapeArr[0] = Point(6, 1, Point::Bomb);
+		shapeArr[0] = Point(6, 0, Point::Bomb);
 	
 	 if (type == joker) 
-		shapeArr[0] = Point(6, 1, Point::Joker);
+		shapeArr[0] = Point(6, 0, Point::Joker);
 	
 }
 Point* Shape::getShapeArr() {
@@ -40,7 +40,7 @@ void Shape::rotate() {
 	//TODO: need to check if the shape isn't override another shape (when rotated).
 
 
-	if (shapeArr[0].getY() > 1) {
+	if (shapeArr[0].getY() > 2) {
 		if (shapeArr[0].getX() >= Game::WIDTH - 2 && isRotated) {
 			//this is in case that the shape is too close to the right WALL.
 			for (int i = 0; i < 4; i++)
