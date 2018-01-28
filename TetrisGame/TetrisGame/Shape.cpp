@@ -1,22 +1,25 @@
 #include "Shape.h"
 #include "Game.h"
 
+enum ArrowsKeys {
+	leftArrow = 75, rightArrow = 77, Down = 80, space = 32
+};
 
 Shape::Shape(int _type) {
 	type = _type;
-	isRotated = false;
+	RotState = 0;
 
 	if (type == line) {
-		shapeArr[0] = Point(5, 0, Point::Line);
-		shapeArr[1] = Point(6, 0, Point::Line);
-		shapeArr[2] = Point(7, 0, Point::Line);
-		shapeArr[3] = Point(8, 0, Point::Line);
+		shapeArr[0] = Point(5, 0, Point::RegularShape);
+		shapeArr[1] = Point(6, 0, Point::RegularShape);
+		shapeArr[2] = Point(7, 0, Point::RegularShape);
+		shapeArr[3] = Point(8, 0, Point::RegularShape);
 	}
 	if (type == cube) {
-		shapeArr[0] = Point(5, 1, Point::Cube);
-		shapeArr[1] = Point(6, 1, Point::Cube);
-		shapeArr[2] = Point(5, 0, Point::Cube);
-		shapeArr[3] = Point(6, 0, Point::Cube);
+		shapeArr[0] = Point(5, 1, Point::RegularShape);
+		shapeArr[1] = Point(6, 1, Point::RegularShape);
+		shapeArr[2] = Point(5, 0, Point::RegularShape);
+		shapeArr[3] = Point(6, 0, Point::RegularShape);
 	}
 
 	 if (type == bomb) 
@@ -25,43 +28,68 @@ Shape::Shape(int _type) {
 	 if (type == joker) 
 		shapeArr[0] = Point(6, 0, Point::Joker);
 	
+	 if (type == PlusShape) {
+		shapeArr[0] = Point(5, 0, Point::RegularShape);
+		shapeArr[1] = Point(6, 0, Point::RegularShape);
+		shapeArr[2] = Point(7, 0, Point::RegularShape);
+		shapeArr[3] = Point(6, 1, Point::RegularShape);
+	 }
+
+	 if (type == Lshape) {
+		 shapeArr[1] = Point(5, 0, Point::RegularShape);
+		 shapeArr[0] = Point(5, 1, Point::RegularShape);
+		 shapeArr[2] = Point(6, 0, Point::RegularShape);
+		 shapeArr[3] = Point(7, 0, Point::RegularShape);
+	 }
+	 if (type == ZShape) {
+		 shapeArr[0] = Point(5, 0, Point::RegularShape);
+		 shapeArr[1] = Point(6, 0, Point::RegularShape);
+		 shapeArr[2] = Point(6, 1, Point::RegularShape);
+		 shapeArr[3] = Point(7, 1, Point::RegularShape);
+	 }
 }
-Point* Shape::getShapeArr() {
-	return shapeArr;
-}
+
 void Shape::draw() {
 	for (int i = 0; i < 4; i++) {
 		if (shapeArr[i].getType() != ' ')
-			shapeArr[i].draw();
+			this->getShapeArr()[i].draw();
 	}
 }
-void Shape::rotate() {
+void Shape::rotate(Point rotPoint, char gameBaord[][11]) {
 
 	//TODO: need to check if the shape isn't override another shape (when rotated).
+	if (type == cube)
+		return;
+		Point vr; //this is the vector that we use as the axis of rotation.
+		Point vt; //this is the vector that will be the result after we use the transformation
 
+		//check that we can rotate the shape..
+		for (int i = 0; i < 4; i++) {
+			vr.setXY(shapeArr[i].getX() - rotPoint.getX(), shapeArr[i].getY() - rotPoint.getY()); // we substruct the rotPoint from the original vector.
+			vt.setXY((-1 * vr.getY()), vr.getX()); //here we multiply the rotate matric with the vector.
+			vt.setXY(vt.getX() + rotPoint.getX(), vt.getY() + rotPoint.getY()); //we add the rotPoint values.
+			if (gameBaord[vt.getY()][vt.getX()] != ' ')
+				return;
+			if (vt.getX() > Game::WIDTH || vt.getX() <= 0)
+				return;
+			
+		}
 
-	if (shapeArr[0].getY() > 2) {
-		if (shapeArr[0].getX() >= Game::WIDTH - 2 && isRotated) {
-			//this is in case that the shape is too close to the right WALL.
-			for (int i = 0; i < 4; i++)
-				shapeArr[i].movePoint(shapeArr[i].getX() - (4 - ((Game::WIDTH + 1) - shapeArr[i].getX())), shapeArr[i].getY());
+		if (type != cube)
+			deleteShapeFromBoard();
+
+		for (int i = 0; i < 4; i++) {
+			vr.setXY(shapeArr[i].getX() - rotPoint.getX(), shapeArr[i].getY() - rotPoint.getY()); // we substruct the rotPoint from the original vector.
+			vt.setXY((-1 * vr.getY()), vr.getX()); //here we multiply the rotate matric with the vector.
+			vt.setXY(vt.getX() + rotPoint.getX(), vt.getY() + rotPoint.getY()); //we add the rotPoint values.
+			shapeArr[i].setXY(vt.getX(), vt.getY()); //copy the new values the the original matrix.
 		}
 
 		for (int i = 0; i < 4; i++)
-			if (!isRotated) {
-				int newX = shapeArr[i].getX() - i;
-				int newY = shapeArr[i].getY() - i;
-				shapeArr[i].movePoint(newX, newY);
-			}
-			else {
-				int newX = shapeArr[i].getX() + i;
-				int newY = shapeArr[i].getY() + i;
-				shapeArr[i].movePoint(newX, newY);
-			}
+			shapeArr[i].draw();
 
-			isRotated = !isRotated;
 	}
-}
+
 bool Shape::isShapeCanMove(int dir, char gameBaord[][11]) {
 	bool res = true;
 
@@ -70,4 +98,70 @@ bool Shape::isShapeCanMove(int dir, char gameBaord[][11]) {
 			res = false;
 
 	return res;
+}
+
+int Shape::moveShape(int DIR, char mapArr[][11])
+{
+	int shapeSize = 0;
+
+	for (int i = 0; i < 4; i++)
+		if (shapeArr[i].getType() != ' ')
+			shapeSize++;
+
+
+	switch (DIR)
+	{
+	case Down: {
+		if (isShapeCanMove(Down, mapArr)) {
+			deleteShapeFromBoard();
+			for (int i = 0; i < shapeSize; i++) {
+				shapeArr[i].setY(shapeArr[i].getY() + 1);
+				shapeArr[i].draw();
+			}
+			
+		}
+		break;
+	}
+	case leftArrow: {
+		if (isShapeCanMove(leftArrow, mapArr)) {
+			deleteShapeFromBoard();
+			for (int i = 0; i < shapeSize; i++) {
+				shapeArr[i].setX(shapeArr[i].getX() - 1);
+				shapeArr[i].draw();
+			}
+		}
+		break;
+	}
+	case rightArrow: {
+		if (isShapeCanMove(rightArrow, mapArr)) {
+			deleteShapeFromBoard();
+			for (int i = 0; i < shapeSize; i++) {
+				shapeArr[i].setX(shapeArr[i].getX() + 1);
+				shapeArr[i].draw();
+			}
+		}
+		break;
+	}
+	case space: {
+
+		rotate(shapeArr[1], mapArr);
+		break;
+	}
+	default:
+		break;
+	}
+
+
+	return 0;
+}
+
+void Shape::deleteShapeFromBoard() {
+	int shapeSize = 0;
+
+	for (int i = 0; i < 4; i++)
+		if (shapeArr[i].getType() != ' ')
+			shapeSize++;
+
+	for (int i = 0; i < shapeSize; i++)
+		shapeArr[i].draw(' ');
 }

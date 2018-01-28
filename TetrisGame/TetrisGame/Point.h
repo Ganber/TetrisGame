@@ -13,8 +13,8 @@ class Point {
 	char type;
 
 public:
-	enum direction { DOWN, LEFT, RIGHT };
-	enum Type {Line='o',Cube='o',Bomb='@',Joker='A',EmptyType=' '};
+	enum direction { leftArrow = 75, rightArrow = 77, Down = 80 };
+	enum Type {RegularShape='o',Bomb='@',Joker='A',EmptyType=' '};
 
 	Point(int _x = 0, int _y = 0, char _type = EmptyType) {
 		x = _x;
@@ -29,10 +29,10 @@ public:
 	void setType(char _type) {type = _type;}
 	void movePoint(int _x, int _y);
 	void draw();
+	void draw(char val);
 	void move(int dir, char gameBaord[][11]);
 	bool canMove(int dir, char gameBaord[][11]);
-
-
+	void setXY(int newX, int newY);
 
 };
 

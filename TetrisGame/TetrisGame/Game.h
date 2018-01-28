@@ -7,6 +7,7 @@ public:
 	enum border { WIDTH = 10, HEIGHT = 15 };
 	enum asciiShapes {LongCube=219,TopCube=223};
 
+
 private:
     double gameSpeed;
 	int gameScore;
@@ -20,16 +21,15 @@ public:
 	void runGame();
 	void initBoard();
 	void initMenu();
-	Shape dropNewShape();
+	Shape* dropNewShape();
 	void updateCompltedLine(int line);
 	void updateScoreAndCount();
 	bool gameOver();
 	void startNewGame();
-	bool keyPressed(int keyCode, Shape &s1);
-	void createExplosion(Shape bomb);
+	void keyPressed(int keyCode,Shape* s1);
 	void updateBoard();
-	int createRandomShape();
-	void updateLineComplition(Shape &s1);
+	Shape* createRandomShape();
+	void updateLineComplition(Shape* s1);
 
 };
 

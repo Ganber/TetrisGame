@@ -10,15 +10,23 @@ void Point::movePoint(int _x, int _y) {
 	draw();
 }
 void Point::draw() {
+
 	if (y > -1) {
 		gotoxy(x, y);
 		cout << type;
 	}
 }
+void Point::draw(char val)
+{
+	if (y > -1) {
+		gotoxy(x, y);
+		cout << val;
+	}
+}
 void Point::move(int dir, char gameBaord[][11]) {
 
 	if (type != ' ') {
-		if (dir == DOWN) {
+		if (dir == Down) {
 			gotoxy(x, y);
 
 			if (type == Point::Joker)
@@ -30,7 +38,7 @@ void Point::move(int dir, char gameBaord[][11]) {
 			draw();
 		}
 
-		else if (dir == LEFT) {
+		else if (dir == leftArrow) {
 			gotoxy(x, y);
 
 			if (type == Point::Joker)
@@ -42,7 +50,7 @@ void Point::move(int dir, char gameBaord[][11]) {
 			draw();
 		}
 
-		else if (dir == RIGHT) {
+		else if (dir == rightArrow) {
 			gotoxy(x, y);
 			if (type == Point::Joker)
 				cout << gameBaord[y][x];
@@ -57,7 +65,7 @@ void Point::move(int dir, char gameBaord[][11]) {
 bool Point::canMove(int dir, char gameBaord[][11]) {
 
 
-	if (dir == DOWN && y + 1 < HEIGHT) {//Move the point down
+	if (dir == Down && y + 1 < HEIGHT) {//Move the point down
 		if (gameBaord[y + 1][x] == ' ') //that's mean that we can move the point down by 1.
 			return true;
 		else
@@ -65,7 +73,7 @@ bool Point::canMove(int dir, char gameBaord[][11]) {
 				return true;
 	}
 
-	else if (dir == LEFT && x > 1) {
+	else if (dir == leftArrow && x > 1) {
 		if (gameBaord[y][x - 1] == ' ') //check that we can move left.
 			return true;
 		else
@@ -73,7 +81,7 @@ bool Point::canMove(int dir, char gameBaord[][11]) {
 				return true;
 	}
 
-	else if (dir == RIGHT && x < WIDTH) {
+	else if (dir == rightArrow && x < WIDTH) {
 		if (gameBaord[y][x + 1] == ' ')
 			return true;
 		else
@@ -82,4 +90,10 @@ bool Point::canMove(int dir, char gameBaord[][11]) {
 	}
 
 	return false;
+}
+
+void Point::setXY(int newX, int newY)
+{
+	x = newX;
+	y = newY;
 }
