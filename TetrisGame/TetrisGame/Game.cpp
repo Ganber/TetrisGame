@@ -76,6 +76,8 @@ void Game::initMenu() {
 
 Shape* Game::dropNewShape() {
 	char keyprees;
+	int explodedPieces = 0;
+	char OP = ' ';
 	Shape* s1 = createRandomShape(); //create a random shape.
 	s1->draw();
 
@@ -90,25 +92,27 @@ Shape* Game::dropNewShape() {
 			if (s1->getType() == Shape::joker && keyprees == 's')
 				break;
 			else
-				keyPressed(keyprees,s1);
+				explodedPieces=keyPressed(keyprees,s1);
 				
 		}
+		if (explodedPieces > 0)
+			break;
 
 		if (msPassed > gameSpeed) { // every 'gameSpeed' ms move down shape.
-			s1->moveShape(downArrow,mapArr);
+
+			s1->moveShape(downArrow, mapArr);
 
 			gameScore += int(80 / gameSpeed);
-			
-			updateScoreAndCount();
 
 			msPassed = 0; //starting the timer again.
 			startTime = clock();
 			Sleep(1);
 		}
+
 	}
 
 
-
+	gameScore = gameScore - (50 * explodedPieces);
 	gameSpeed = speedSaver;
 	return s1;
 
@@ -158,22 +162,22 @@ void Game::startNewGame() {
 	while (!gameOver()) {
 		hitShapeCounter = 0;
 		Shape* s1 = dropNewShape(); //create new shape and drop it, shape is now s1.
-
+		hitShapeCounter = s1->createExplotion(mapArr);
+		gameScore = gameScore - (50 * hitShapeCounter);
+		updateScoreAndCount();
 		shapeCount++;
 
-		if (s1->getType() == Shape::bomb)
-			hitShapeCounter=s1->createExplotion(mapArr);
-		else
+
+		if (s1->getType() != Shape::bomb)
 			for (int i = 0; i < 4; i++) //put the shape in the map array of the game 
 				mapArr[s1->getShapeArr()[i].getY()][s1->getShapeArr()[i].getX()] = s1->getShapeArr()[i].getType();
 
 		updateBoard();
-		gameScore = gameScore - (50 * hitShapeCounter);
 		updateLineComplition(s1);
 	}
 }
 
-void Game::keyPressed(int keyCode,Shape* s1) {
+int Game::keyPressed(int keyCode,Shape* s1) {
 
 	switch (keyCode)
 	{
@@ -216,13 +220,18 @@ void Game::keyPressed(int keyCode,Shape* s1) {
 		break;
 	}
 
+	case downArrow: {
+		gameSpeed = gameSpeed / 10;
+	}
 
 	default: {
-		s1->moveShape(keyCode,mapArr);
+		return s1->moveShape(keyCode,mapArr);
 		break;
 	}
 
 	}
+
+	return 0;
 }
 
 void Game::updateBoard() {
@@ -247,7 +256,7 @@ Shape* Game::createRandomShape() {
 	Shape* s5 = new Shape(Shape::ZShape);
 
 
-	Shape* pShapes[7] = {b1,b1,s1,s2,s3,s4,s5 };
+	Shape* pShapes[7] = {b1,j1,s1,s2,s3,s4,s5 };
 
 	return pShapes[pivot];
 
@@ -258,15 +267,15 @@ void Game::updateLineComplition(Shape* s1) {
 	int numOfLinesComplted = 0;
 
 	//for each point in the shape, check if she complted a line :
-	for (int i = 3; i >= 0; i--) { // need to start from the top to bottom.
+	for (int i = 0; i < HEIGHT; i++) { // need to start from the top to bottom.
 		completedLine = true; //we assume that the line is complted.
 		for (int j = 1; j < WIDTH + 1; j++) {
-			if (mapArr[s1->getShapeArr()[i].getY()][j] == ' ') //that's mean that the line isn't complted.
+			if (mapArr[i][j] == ' ') //that's mean that the line isn't complted.
 				completedLine = false; //--Maybe add here a break;.
 		}
 		if (completedLine) {
 			numOfLinesComplted++;
-			updateCompltedLine(s1->getShapeArr()[i].getY()); //this update the board and move above shapes down.
+			updateCompltedLine(i); //this update the board and move above shapes down.
 		}
 	}
 	if (s1->getType() == Shape::joker && numOfLinesComplted == 1) { //in case the line complted by a joker.

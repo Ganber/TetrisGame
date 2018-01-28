@@ -23,7 +23,7 @@ void Point::draw(char val)
 		cout << val;
 	}
 }
-void Point::move(int dir, char gameBaord[][11]) {
+void Point::move(int dir, char gameBaord[][WIDTH +1]) {
 
 	if (type != ' ') {
 		if (dir == Down) {
@@ -62,7 +62,7 @@ void Point::move(int dir, char gameBaord[][11]) {
 		}
 	}
 }
-bool Point::canMove(int dir, char gameBaord[][11]) {
+bool Point::canMove(int dir, char gameBaord[][WIDTH +1]) {
 
 
 	if (dir == Down && y + 1 < HEIGHT) {//Move the point down

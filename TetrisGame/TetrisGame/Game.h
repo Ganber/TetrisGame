@@ -13,8 +13,8 @@ private:
 	int gameScore;
 	int shapeCount;
 	char mapArr[HEIGHT][WIDTH + 1] = { false }; // + 1 becuase of the walls.
-	double speedSaver; //maybe think about smthing smarted to save speed.
-	bool isPressedDown = false; //maybe think about smthing smarted to save speed.
+	double speedSaver; 
+	bool isPressedDown = false;
 
 public:
 	Game();
@@ -26,7 +26,7 @@ public:
 	void updateScoreAndCount();
 	bool gameOver();
 	void startNewGame();
-	void keyPressed(int keyCode,Shape* s1);
+	int keyPressed(int keyCode,Shape* s1);
 	void updateBoard();
 	Shape* createRandomShape();
 	void updateLineComplition(Shape* s1);

@@ -4,8 +4,6 @@
 
 class Shape {
 private:
-	enum class RotationState {zeroRotation,oneRotation,twoRotation,threeRotation};
-	int RotState;
 	int type;
 
 	Point shapeArr[4]; //For all kind of shapes
@@ -16,12 +14,13 @@ public:
 	Shape(int _Type);
 	Shape() {}
 	int getType() { return type; }
-	void draw();
-	void rotate(Point rotPoint, char gameBaord[][11]);
-	bool isShapeCanMove(int dir, char gameBaord[][11]);
-	virtual int moveShape(int DIR, char mapArr[][11]);
+	virtual void draw();
+	void rotate(Point rotPoint, char gameBaord[][WIDTH +1]);
+	bool isShapeCanMove(int dir, char gameBaord[][WIDTH +1]);
+	virtual int moveShape(int DIR, char mapArr[][WIDTH +1]);
+	virtual char getOverridedPiece() { return ' '; }
 	void deleteShapeFromBoard();
-	virtual int createExplotion(char mapArr[][11]) { return 0; }
+	virtual int createExplotion(char mapArr[][WIDTH +1]) { return 0; }
 	Point* getShapeArr() { return shapeArr; }
 };
 

@@ -7,7 +7,6 @@ enum ArrowsKeys {
 
 Shape::Shape(int _type) {
 	type = _type;
-	RotState = 0;
 
 	if (type == line) {
 		shapeArr[0] = Point(5, 0, Point::RegularShape);
@@ -55,9 +54,9 @@ void Shape::draw() {
 			this->getShapeArr()[i].draw();
 	}
 }
-void Shape::rotate(Point rotPoint, char gameBaord[][11]) {
+void Shape::rotate(Point rotPoint, char gameBaord[][Game::WIDTH +1]) {
+	//Generic rotate with linear transformation.
 
-	//TODO: need to check if the shape isn't override another shape (when rotated).
 	if (type == cube)
 		return;
 		Point vr; //this is the vector that we use as the axis of rotation.
@@ -90,7 +89,7 @@ void Shape::rotate(Point rotPoint, char gameBaord[][11]) {
 
 	}
 
-bool Shape::isShapeCanMove(int dir, char gameBaord[][11]) {
+bool Shape::isShapeCanMove(int dir, char gameBaord[][Game::WIDTH +1]) {
 	bool res = true;
 
 	for (int i = 0; i < 4; i++)
@@ -100,7 +99,7 @@ bool Shape::isShapeCanMove(int dir, char gameBaord[][11]) {
 	return res;
 }
 
-int Shape::moveShape(int DIR, char mapArr[][11])
+int Shape::moveShape(int DIR, char mapArr[][Game::WIDTH +1])
 {
 	int shapeSize = 0;
 
